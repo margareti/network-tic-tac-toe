@@ -1,0 +1,122 @@
+
+body {
+	font-family: Helvetica, sans-serif;
+	color: #333;
+}
+.content {
+	max-width: 700px;
+	margin: auto;
+	padding: 50px 10px;
+}
+.games-headline {
+	font-size: 36px;
+	text-align: center;
+}
+ul {
+	border: 1px solid #acacac;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+li:not(:last-child) {
+	border-bottom: 1px solid #acacac;
+}
+li:nth-child(2n) {
+	background: rgba(255, 156, 143, 0.5);
+}
+li {
+	padding: 10px;
+	cursor: pointer;
+}
+button {
+	background: rgba(255, 156, 143, 0.5);
+	border-radius: 2px;
+	padding: 10px;
+	font-size: 16px;
+	margin-top: 20px;
+	display: inline-block;
+	border: 1px solid #acacac;
+	outline: none;
+	transition: 1s;
+	cursor: pointer;
+}
+
+button:focus {
+	outline: none;
+}
+button:hover:not(:disabled), button:focus:not(:disabled) {
+	background: rgba(255, 156, 143, 0.8);
+}
+.pending {
+	font-size: 16px;
+	font-style: italic;
+}
+.players {
+	display: flex;
+	margin-top: 20px;
+}
+.players > div {
+	width: 50%;
+}
+.players > div + div {
+	text-align: right
+}
+.players h3 {
+font-family: cursive;
+}
+.boardgame {
+	width: 400px;
+	margin: 20px auto;
+}
+.boardgame td {
+	width: 40px;
+	height: 40px;
+	border: 2px solid #666;
+	cursor: pointer;
+	text-align: center;
+	font-size: 35px;
+	line-height: 40px;
+}
+.right {
+	text-align: right;
+	font-size: 30px;
+}
+
+.popup {
+	background: white;
+	min-width: 100%;
+	min-height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	padding: 10px;
+	box-sizing: border-box;
+	font-size: 50px;
+	color: #333;
+	padding-top: 200px;
+}
+.close {
+	text-align: right;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	box-sizing: border-box;
+	left: 0;
+	padding: 0 10px;
+}	
+.hide {
+	display: none;
+}
+.gameover {
+	position: relative;
+}
+.gameover:before {
+    content: "";
+    width: 110%;
+    height: 110%;
+    background: rgba(255, 255, 255, .6);
+    position: absolute;
+    left: -10px;
+    top: 0;
+}
