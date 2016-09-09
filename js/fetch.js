@@ -19,14 +19,13 @@ let playerSide;
 let yourTurn = false;
 
 ws.onclose = () => {
-	console.log("closing WS");
-	ws = new WebSocket(wsURL);
-}
+  console.log('closing WS');
+  ws = new WebSocket(wsURL);
+};
 
 ws.onerror = (err) => {
-  console.log("WS error ", err);
   modal(err);
-}
+};
 
 ws.onmessage = (event) => {
   const res = JSON.parse(event.data);
@@ -97,17 +96,18 @@ function buttonFunc(element) {
   const el = element;
   el.addEventListener('click', () => {
     if (el.textContent === 'Сдаться...') {
-      const req = fetch(surrenderURL, {
+      fetch(surrenderURL, {
         method: 'PUT',
         headers: {
           'Game-ID': chosenID,
           'Player-ID': playerID,
-        }
+        },
       })
       .then(r => r.text())
-      .then((data) => {
+      .then(() => {
         el.textContent = 'Новая игра';
         games.classList.remove('hide');
+        gameOver();
       })
       .catch((error) => {
         console.log(error);
@@ -119,9 +119,8 @@ function buttonFunc(element) {
         }
         modal(failMsg);
       });
-
     } else {
-      const post = fetch(newGameURL, {
+      fetch(newGameURL, {
         method: 'POST',
       })
       .then(r => r.text())
@@ -129,12 +128,9 @@ function buttonFunc(element) {
         clearGame();
         el.disabled = true;
         getID = JSON.parse(data);
-        console.log("date on post ", getID.yourId);
-        const regObj = JSON.stringify({ register: getID.yourId });
-        console.log("ws state ", ws.readyState);
-        ws.onopen = () => {
-          ws.send(regObj);
-        };
+        chosenID = getID.yourId;
+        const regObj = JSON.stringify({ register: chosenID });
+        ws.send(regObj);
       })
       .catch((error) => {
         el.disabled = false;
@@ -153,8 +149,9 @@ function clearGame() {
   });
 }
 
+
 games.addEventListener('click', (ev) => {
-	clearGame();
+  clearGame();
   const listElements = games.querySelectorAll('li');
   Array.from(listElements).forEach((x) => {
     if (ev.target === x) {
@@ -202,7 +199,6 @@ function cellResponse(table, side) {
   const cells = table.querySelectorAll('td');
   Array.from(cells).forEach((x) => {
     x.addEventListener('click', () => {
-      console.log(`its your turn ${yourTurn}`);
       if (yourTurn) {
         moveReq(x.dataset.index, side, table);
       }
@@ -236,7 +232,6 @@ function listenOnPOST(table, side) {
   })
   .then(r => r.json())
   .then((data) => {
-    console.log(data);
     const res = data;
     if (res.hasOwnProperty('win')) {
       modal(res.win);
@@ -248,8 +243,8 @@ function listenOnPOST(table, side) {
     }
   })
   .catch((err) => {
-    console.log(err);
     modal(err);
+    gameOver();
   });
 }
 
@@ -284,8 +279,11 @@ function moveReq(cell, side, table) {
     const res = data;
     const gameWon = res.hasOwnProperty('win');
     if (res.hasOwnProperty('message')) {
-      modal(res.message);
-      return;
+      if (res.message === 'Некорректный ход') {
+        modal(res.message);
+        return;
+      }
+      throw new Error(res);
     }
     if (gameWon) {
       modal(res.win);
