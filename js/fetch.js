@@ -19,7 +19,7 @@ let playerSide;
 let yourTurn = false;
 
 ws.onclose = () => {
-  console.log('closing WS');
+	console.log('closing WS');
   ws = new WebSocket(wsURL);
 };
 
